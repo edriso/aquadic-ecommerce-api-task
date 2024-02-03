@@ -15,9 +15,11 @@ return new class extends Migration {
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->unsignedDecimal('price', 10, 2);
             $table->unsignedInteger('quantity');
-            $table->string('color')->nullable();
+            $table->string('color');
             $table->unsignedDecimal('discount_percentage', 5, 2)->default(0);
             $table->timestamps();
+
+            $table->unique(['product_id', 'color']);
         });
     }
 
