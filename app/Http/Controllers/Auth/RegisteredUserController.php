@@ -39,7 +39,6 @@ class RegisteredUserController extends Controller
         $token = $user->createToken('api-token');
 
         return response()->json([
-            'success' => true,
             'data' => [
                 'user' => ['name' => $user->name],
                 'token' => $token->plainTextToken,
