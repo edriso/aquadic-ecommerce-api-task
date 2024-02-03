@@ -1,6 +1,9 @@
 # Aquadic E-commerce API Task
 
-Welcome to the Aquadic E-Commerce API, a simulation of essential e-commerce functionalities, including authentication, order placement, and email notifications on ordering. This app is built using the Laravel framework version 10.
+Welcome to my repository for Aquadic task implemented using Laravel version 10.
+
+This is an API of essential e-commerce functionalities, providing features such as user authentication (Login, Register, Logout) based on token authentication, order placement, and email notifications upon ordering. The product requirement mandated support for multiple colors and discount options.
+[1-Minute Preview Video on Youtube](https://youtu.be/QnXFeE8TPG8)
 
 ## Getting Started
 
@@ -104,3 +107,7 @@ Once the prerequisites are in place, follow the installation steps below to set 
 ### Database Schema
 
 ![Database Schema](readme-files/database-schema.png)
+
+### Future Roadmap
+
+-   [ ] Implement Filament for the admin dashboard to manage and insert products.
