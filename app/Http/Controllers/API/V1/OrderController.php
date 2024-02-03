@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Order;
+use App\Jobs\OrderPlacedJob;
 use App\Models\ProductDetail;
+use App\Notifications\OrderPlaced;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Requests\StoreOrderRequest;
@@ -40,6 +42,8 @@ class OrderController extends Controller
 
             $productDetail->decrement('quantity', $quantity);
         }
+
+        OrderPlacedJob::dispatch(auth()->user(), $order);
 
         $order->load('productDetails');
 
