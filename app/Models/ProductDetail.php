@@ -20,4 +20,16 @@ class ProductDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_items')
+            ->withPivot('quantity', 'paid_price')
+            ->withTimestamps();
+    }
+
+    public function scopeFilterByProductIdAndColor($query, $productId, $color)
+    {
+        return $query->where('product_id', $productId)->where('color', $color);
+    }
 }

@@ -23,11 +23,4 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class);
     }
-
-    public function orders()
-    {
-        return $this->belongsToMany(Order::class)
-            ->withPivot('quantity', 'paid_price')
-            ->withTimestamps();
-    }
 }
