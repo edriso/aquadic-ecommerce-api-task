@@ -51,4 +51,11 @@ class EmailVerificationTest extends TestCase
 
         $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
+    public function test_expired_verification_link_is_rejected(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => null]);
+        $url = URL::temporarySignedRoute('verification.verify', now()->subMinute(), ['id' => $user->id, 'hash' => sha1($user->email)]);
+        $this->actingAs($user)->get($url)->assertForbidden();
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
+    }
 }

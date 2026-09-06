@@ -10,38 +10,28 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_users_can_authenticate_and_receive_an_api_token(): void
     {
         $user = User::factory()->create();
-
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-
-        $this->assertAuthenticated();
-        $response->assertNoContent();
+        $user->createToken('old-token');
+        $this->postJson('/api/login', ['email' => $user->email, 'password' => 'password'])
+            ->assertOk()->assertJsonStructure(['data' => ['token', 'user' => ['name']]]);
+        $this->assertCount(1, $user->tokens()->get());
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
+    public function test_users_cannot_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();
-
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
-
-        $this->assertGuest();
+        $this->postJson('/api/login', ['email' => $user->email, 'password' => 'wrong-password'])
+            ->assertUnprocessable()->assertJsonValidationErrors('email');
+        $this->assertCount(0, $user->tokens()->get());
     }
 
-    public function test_users_can_logout(): void
+    public function test_logout_revokes_the_current_api_token(): void
     {
         $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->post('/logout');
-
-        $this->assertGuest();
-        $response->assertNoContent();
+        $token = $user->createToken('api-token');
+        $this->withToken($token->plainTextToken)->postJson('/api/logout')->assertNoContent();
+        $this->assertCount(0, $user->tokens()->get());
     }
 }

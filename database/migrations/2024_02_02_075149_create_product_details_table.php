@@ -13,10 +13,10 @@ return new class extends Migration {
         Schema::create('product_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->unsignedDecimal('price', 10, 2);
+            $table->decimal('price', 10, 2)->unsigned();
             $table->unsignedInteger('quantity');
             $table->string('color');
-            $table->unsignedDecimal('discount_percentage', 5, 2)->default(0);
+            $table->decimal('discount_percentage', 5, 2)->unsigned()->default(0);
             $table->timestamps();
 
             $table->unique(['product_id', 'color']);
